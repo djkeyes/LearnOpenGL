@@ -184,6 +184,7 @@ endmacro()
 
 # then create a project file per tutorial
 foreach(CHAPTER ${CHAPTERS})
+    file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CHAPTER})
     foreach(DEMO ${${CHAPTER}})
         file(GLOB SOURCE
             "src/${CHAPTER}/${DEMO}/*.h"
@@ -217,7 +218,7 @@ foreach(CHAPTER ${CHAPTERS})
                 # configure_file(${SHADER} "test")
                 add_custom_command(TARGET ${NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SHADER} $<TARGET_FILE_DIR:${NAME}>)
             elseif(UNIX AND NOT APPLE)
-                file(COPY ${SHADER} DESTINATION ${CMAKE_SOURCE_DIR}/bin/${CHAPTER})
+                configure_file(${SHADER} ${CMAKE_SOURCE_DIR}/bin/${CHAPTER} COPYONLY)
             elseif(APPLE)
                 # create symbolic link for *.vs *.fs *.gs
                 get_filename_component(SHADERNAME ${SHADER} NAME)
